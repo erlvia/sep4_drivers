@@ -6,7 +6,7 @@
  * connected to pin PK1 (ADC9) on the ATmega2560.
  *
  * @author Your Name
- * @date September 2023
+ * @date September 2023, April 2025
  */
 
 #include "light.h"
@@ -27,9 +27,7 @@ void light_init(void) {
     //DDRK|=(1 << PK1);
 
     // Set reference voltage to AVCC and left adjust ADC result
-    // The  MUX1:5 should be set to 100111 for choosing ADC15, which ius placed on PK0 (look at page 283)
-    ADMUX = (1 << REFS0)|(1<<MUX2)|(1<<MUX1)|(1<<MUX0);
-    ADCSRB = (1<<MUX5);
+    ADMUX = (1 << REFS0);
     // Enable ADC and set prescaler to 64 (16MHz/128 = 125kHz)
     // ADC must operate between 50kHz and 200kHz for its full 10-bit resolution
     ADCSRA = (1 << ADEN) | (1 << ADPS2) | (1 << ADPS1)| (1 << ADPS0);
@@ -51,6 +49,10 @@ void light_init(void) {
 uint16_t light_read(void) {
 
 uint32_t timeout = 40000;//if 2cc for incrementing and evaluation the timeout is 5ms
+    // The  MUX1:5 should be set to 100111 for choosing ADC15, which ius placed on PK0 (look at page 283)
+    ADMUX = (1<<MUX2)|(1<<MUX1)|(1<<MUX0);
+    ADCSRB = (1<<MUX5);
+
     // Start the conversion
     ADCSRA |= (1 << ADSC);
 
