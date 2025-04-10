@@ -50,8 +50,9 @@ uint16_t light_read(void) {
 
 uint32_t timeout = 40000;//if 2cc for incrementing and evaluation the timeout is 5ms
     // The  MUX1:5 should be set to 100111 for choosing ADC15, which ius placed on PK0 (look at page 283)
-    ADMUX = (1<<MUX2)|(1<<MUX1)|(1<<MUX0);
-    ADCSRB = (1<<MUX5);
+    ADMUX |= (1<<MUX2)|(1<<MUX1)|(1<<MUX0);
+    ADMUX &= ~((1<<MUX4)|(1<<MUX3));
+    ADCSRB |= (1<<MUX5);
 
     // Start the conversion
     ADCSRA |= (1 << ADSC);
